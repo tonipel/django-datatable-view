@@ -126,7 +126,7 @@ class DatatableMixin(MultipleObjectMixin):
                         field_method_name = 'search_' + field.name
                         if hasattr(self, field_method_name):
                             # Call field specific method to get the field queries
-                            field_queries.append(getattr(self, field_method_name)(field, term))
+                            field_queries.append(getattr(self, field_method_name)(field, term, component_name))
                         elif field.choices:
                             # Query the database for the database value rather than display value
                             choices = field.get_flatchoices()
