@@ -100,7 +100,7 @@ class DatatableMixin(MultipleObjectMixin):
             self._datatable_options = options
         return self._datatable_options
 
-    def _buildSearchQueries( self, db_fields, search_query, is_regex ):
+    def _buildSearchQueries( self, db_fields, search_query, is_regex, column_search=False):
         queries = []
 
         if is_regex:
@@ -129,18 +129,25 @@ class DatatableMixin(MultipleObjectMixin):
                             field_queries.append(getattr(self, field_method_name)(field, term, component_name))
                         elif field.choices:
                             # Query the database for the database value rather than display value
-                            choices = field.get_flatchoices()
-                            length = len(choices)
-                            database_values = []
-                            display_values = []
+                            database_values, display_values = zip(*field.get_flatchoices())
+                            string_database_values = [unicode(value).lower() for value in database_values]
+                            display_values = [unicode(value).lower() for value in display_values]
 
-                            for choice in choices:
-                                database_values.append(choice[0])
-                                display_values.append(choice[1].lower())
+                            all_values = zip(display_values, string_database_values, database_values)
 
-                            for i in range(length):
-                                if term.lower() in display_values[i]:
-                                    field_queries = [{component_name + '__iexact': database_values[i]}]
+                            search_term = term.lower()
+
+                            # If searching a specific column then match against the database value
+                            if column_search:
+                                for display_value, string_database_value, database_value in all_values:
+                                    if search_term == string_database_value:
+                                        field_queries.append({component_name + '__exact': database_value})
+                            # If searching globally then match against the display value
+                            else:
+                                for display_value, string_database_value, database_value in all_values:
+                                    if search_term in display_value:
+                                        field_queries.append({component_name + '__exact': database_value})
+
                         elif isinstance( field, tuple( FIELD_TYPES[ 'text' ] ) ):
                             field_queries = [ { component_name + '__icontains': term } ]
                         elif isinstance( field, tuple( FIELD_TYPES[ 'date' ] ) ):
@@ -257,7 +264,7 @@ class DatatableMixin(MultipleObjectMixin):
                 else:
                     is_exclude = False
 
-                queries = [ ( x, is_exclude ) for x in self._buildSearchQueries( [ db_field ], col_search, options['is_regex'] ) ]
+                queries = [ ( x, is_exclude ) for x in self._buildSearchQueries( [ db_field ], col_search, options['is_regex'], column_search=True) ]
                 all_queries += queries
 
             include_queries = [ q for ( q, is_exclude ) in all_queries if not is_exclude ]
