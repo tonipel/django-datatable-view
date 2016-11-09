@@ -222,6 +222,25 @@ class DatatableMixin(MultipleObjectMixin):
 
         return queries
 
+    def adjust_column_searches(self, columns, searches):
+        """Adjust the column search terms to match the database fields.
+
+        To make sure the column searches hit the correct fields, we need to adjust the list of searches to match
+        only the real database fields, ie Column[1] which contains the field name.
+
+        :param fields: Columns list from datatable options
+        :type fields: list
+        :param searches: List of search terms
+        :type searches: list
+        :returns: List of search terms for DB fields only
+        :rtype: list
+        """
+        final_searches = []
+        for i, column in enumerate(columns):
+            if column[1]:
+                final_searches.append(searches[i])
+        return final_searches
+
     def apply_queryset_options(self, queryset):
         """
         Interprets the datatable options.
@@ -264,7 +283,8 @@ class DatatableMixin(MultipleObjectMixin):
                 queries = [ ( x, is_exclude ) for x in self._buildSearchQueries( db_fields, global_search, options['is_regex'] ) ]
                 all_queries += queries
 
-            for db_field, col_search in zip( org_db_fields, options['column_searches'] ):
+            for db_field, col_search in zip(org_db_fields, self.adjust_column_searches(
+                    options["columns"], options['column_searches'])):
                 if not col_search:
                     continue
 
