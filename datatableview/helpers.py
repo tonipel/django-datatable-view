@@ -11,17 +11,13 @@ in any way.
 
 from functools import partial, wraps
 
-from django import get_version
-from django.forms.util import flatatt
+from django.forms.utils import flatatt
 
 import six
 
 from .utils import resolve_orm_path, XEDITABLE_FIELD_TYPES
 
-if get_version().split('.') >= ['1', '5']:
-    from django.utils.timezone import localtime
-else:
-    localtime = None
+from django.utils.timezone import localtime
 
 
 def keyed_helper(helper):
