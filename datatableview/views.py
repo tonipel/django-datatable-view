@@ -660,7 +660,7 @@ class XEditableMixin(object):
         else:
             return HttpResponseBadRequest()
 
-        field = self.model._meta.get_field_by_name(field_name)[0]
+        field = self.model._meta.get_field(field_name)[0]
 
         choices = self.get_field_choices(field, field_name)
         return HttpResponse(json.dumps(choices))
