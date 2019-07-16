@@ -139,7 +139,7 @@ class DatatableMixin(MultipleObjectMixin):
                             field_queries.append(getattr(self, field_method_name)(field, term, component_name))
                         elif field.choices:
                             # Query the database for the database value rather than display value
-                            database_values, display_values = zip(*field.get_flatchoices())
+                            database_values, display_values = zip(*field.flatchoices)
                             string_database_values = [unicode(value).lower() for value in database_values]
                             display_values = [unicode(value).lower() for value in display_values]
 
