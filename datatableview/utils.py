@@ -20,6 +20,7 @@ except ImportError:
     from .compat import python_2_unicode_compatible
 
 import six
+from six.moves import xrange
 
 # Sane boundary constants
 MINIMUM_PAGE_LENGTH = 5
