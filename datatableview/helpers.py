@@ -11,13 +11,11 @@ in any way.
 
 from functools import partial, wraps
 
-from django.forms.utils import flatatt
-
 import six
-
-from .utils import resolve_orm_path, XEDITABLE_FIELD_TYPES
-
+from django.forms.utils import flatatt
 from django.utils.timezone import localtime
+
+from .utils import XEDITABLE_FIELD_TYPES, resolve_orm_path
 
 
 def keyed_helper(helper):

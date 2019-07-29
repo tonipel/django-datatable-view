@@ -4,10 +4,7 @@ import logging
 import operator
 import re
 
-try:
-    from functools import reduce
-except ImportError:
-    pass
+from functools import reduce
 
 from django.views.generic.list import ListView, MultipleObjectMixin
 from django.http import HttpResponse, HttpResponseBadRequest

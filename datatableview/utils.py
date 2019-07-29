@@ -1,26 +1,14 @@
 from collections import namedtuple
-try:
-    from functools import reduce
-except ImportError:
-    pass
-try:
-    from collections import UserDict
-except ImportError:
-    from UserDict import UserDict
+from functools import reduce
 
 import django
+import six
 from django.db import models
 from django.db.models.fields import FieldDoesNotExist
-from django.template.loader import render_to_string
 from django.forms.utils import flatatt
-
-try:
-    from django.utils.encoding import python_2_unicode_compatible
-except ImportError:
-    from .compat import python_2_unicode_compatible
-
-import six
-from six.moves import xrange
+from django.template.loader import render_to_string
+from django.utils.encoding import python_2_unicode_compatible
+from six.moves import UserDict, xrange
 
 # Sane boundary constants
 MINIMUM_PAGE_LENGTH = 5
