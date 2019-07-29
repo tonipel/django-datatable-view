@@ -1,8 +1,9 @@
 import datetime
 import json
-import re
-import operator
 import logging
+import operator
+import re
+
 try:
     from functools import reduce
 except ImportError:
@@ -11,9 +12,7 @@ except ImportError:
 from django.views.generic.list import ListView, MultipleObjectMixin
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
 from django.db.models import Model, Manager, Q
-from django.utils.cache import add_never_cache_headers
 from django.utils.text import smart_split
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.conf import settings
@@ -479,7 +478,7 @@ class DatatableMixin(MultipleObjectMixin):
         }
         for i, name in enumerate(options['columns']):
             column_data = self.get_column_data(i, name, obj)[0]
-            if six.PY2 and isinstance(column_data, six.binary_type):  # not unicode
+            if isinstance(column_data, bytes):
                 column_data = column_data.decode('utf-8')
             data[str(i)] = six.text_type(column_data)
         return data
@@ -502,7 +501,7 @@ class DatatableMixin(MultipleObjectMixin):
 
         if not isinstance(values, (tuple, list)):
             if six.PY2:
-                if isinstance(values, str):  # not unicode
+                if isinstance(values, bytes):
                     values = values.decode('utf-8')
                 else:
                     values = six.text_type(values)
