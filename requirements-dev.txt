@@ -1,0 +1,4 @@
+-r requirements.txt
+
+# Python 3 code compliant check
+pylint==1.9.5
