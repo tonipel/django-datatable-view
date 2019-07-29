@@ -119,7 +119,7 @@ class DatatableMixin(MultipleObjectMixin):
                         field_queries.append( Q( **{ component_name + u'__iregex' : search_query } ) )
             queries.append( reduce( operator.or_, field_queries ) )
         else:
-            search_terms = map( lambda q: q.strip( "'\" " ), smart_split( search_query ) )
+            search_terms = map( lambda q: q.strip( "'\" " ), smart_split( search_query ) )  # pylint: disable=map-builtin-not-iterating
             for term in search_terms:
                 term_queries = [ ]  # Queries generated to search all fields for this term
                 # Every concrete database lookup string in 'columns' is followed to its trailing field descriptor.  For example, "subdivision__name" terminates in a CharField.  The field type determines how it is probed for search.
@@ -139,6 +139,7 @@ class DatatableMixin(MultipleObjectMixin):
                             string_database_values = [six.text_type(value).lower() for value in database_values]
                             display_values = [six.text_type(value).lower() for value in display_values]
 
+                            # pylint: disable=zip-builtin-not-iterating
                             all_values = zip(display_values, string_database_values, database_values)
 
                             search_term = term.lower()

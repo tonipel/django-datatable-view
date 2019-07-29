@@ -1,12 +1,12 @@
 from datetime import datetime
 from functools import partial
 
-from datatableview import helpers
-
 import six
 
+from datatableview import helpers
+from .test_app.models import ExampleModel, RelatedM2MModel
 from .testcase import DatatableViewTestCase
-from .test_app.models import ExampleModel, RelatedModel, RelatedM2MModel
+
 
 class HelpersTests(DatatableViewTestCase):
     fixtures = ['test_data.json']
@@ -121,7 +121,7 @@ class HelpersTests(DatatableViewTestCase):
         self.assertEqual(output, data[1:3])
 
         # Verify ellipsis works for strings
-        data = str(range(10))
+        data = str([i for i in range(10)])
         secondary_helper = helper(slice(0, 5), ellipsis=True)
         output = secondary_helper(data)
         self.assertEqual(output, data[:5] + "...")
@@ -132,7 +132,7 @@ class HelpersTests(DatatableViewTestCase):
         self.assertEqual(output, data[:5] + "custom")
 
         # Verify ellipsis does nothing for non-string data types
-        data = range(10)
+        data = range(10)  # pylint: disable=range-builtin-not-iterating
         output = secondary_helper(data)
         self.assertEqual(output, data[:5])
 
