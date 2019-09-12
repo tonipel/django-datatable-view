@@ -265,7 +265,8 @@ class DatatableMixin(MultipleObjectMixin):
             db_fields, sort_fields = split_real_fields(self.get_model(), options['ordering'])
             queryset = queryset.order_by(*db_fields)
 
-        if options['search'] or [ x for x in options['column_searches' ] if x ]:
+        datatable_searches = options['search'] or [ x for x in options['column_searches'] if x ]
+        if datatable_searches:
             org_db_fields, searches = filter_real_fields(self.get_model(), options['columns'],
                                                      key=get_first_orm_bit)
             db_fields = org_db_fields + options['search_fields']
@@ -309,7 +310,7 @@ class DatatableMixin(MultipleObjectMixin):
         if not sort_fields and not searches:
             # We can shortcut and speed up the process if all operations are database-backed.
             object_list = queryset
-            if options['search']:
+            if datatable_searches:
                 object_list._dtv_unpaged_total = queryset.count()
             else:
                 object_list._dtv_unpaged_total = total_initial_record_count
