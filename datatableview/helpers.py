@@ -12,7 +12,7 @@ in any way.
 from functools import partial, wraps
 
 from django import get_version
-from django.forms.util import flatatt
+from django.forms.utils import flatatt
 
 import six
 
