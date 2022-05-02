@@ -230,7 +230,7 @@ class DatatableStructure(object):
 
         column_info = []
         if self.model:
-            model_fields = self.model._meta.get_all_field_names()
+            model_fields = [f.name for f in self.model._meta.get_fields()]
         else:
             model_fields = []
 

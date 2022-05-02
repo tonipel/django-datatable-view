@@ -25,6 +25,7 @@ class XEditableUpdateForm(forms.Form):
     def clean_name(self):
         """ Validates that the field is represented on the model. """
         field_name = self.cleaned_data['name']
-        if field_name not in self.model._meta.get_all_field_names():
+        all_field_names = [f.name for f in self.model._meta.get_fields()]
+        if field_name not in all_field_names:
             raise ValidationError("%r is not a valid field." % field_name)
         return field_name
