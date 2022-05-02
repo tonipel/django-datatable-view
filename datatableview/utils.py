@@ -112,7 +112,7 @@ def resolve_orm_path(model, orm_path):
 
     bits = orm_path.split('__')
     endpoint_model = reduce(get_model_at_related_field, [model] + bits[:-1])
-    field, _, _, _ = endpoint_model._meta.get_field_by_name(bits[-1])
+    field = endpoint_model._meta.get_field(bits[-1])
     return field
 
 
@@ -124,7 +124,8 @@ def get_model_at_related_field(model, attr):
     """
 
     try:
-        field, _, direct, m2m = model._meta.get_field_by_name(attr)
+        field = model._meta.get_field(attr)
+        direct = not field.auto_created or field.concrete
     except FieldDoesNotExist:
         raise
 
@@ -241,7 +242,7 @@ class DatatableStructure(object):
             if column.fields and column.fields[0] in model_fields:
                 ordering_name = column.fields[0]
                 if not pretty_name:
-                    field = self.model._meta.get_field_by_name(column.fields[0])[0]
+                    field = self.model._meta.get_field(column.fields[0])
                     column_name = field.name
                     pretty_name = field.verbose_name
             else:
