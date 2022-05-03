@@ -305,7 +305,7 @@ class DatatableOptions(UserDict):
         num_columns = len( options['columns'] )
 
         column_searches = []
-        for i in xrange( num_columns ):
+        for i in range( num_columns ):
             column_searches.append( query.get( '%s_%d' % ( OPTION_NAME_MAP['search'], i ) ) )
         options['column_searches'] = column_searches
 
