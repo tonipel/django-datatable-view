@@ -10,7 +10,7 @@ except ImportError:
 
 import django
 from django.db import models
-from django.db.models.fields import FieldDoesNotExist
+from django.core.exceptions import FieldDoesNotExist
 from django.template.loader import render_to_string
 from django.forms.utils import flatatt
 
@@ -105,7 +105,7 @@ ColumnInfoTuple = namedtuple('ColumnInfoTuple', ['pretty_name', 'attrs'])
 def resolve_orm_path(model, orm_path):
     """
     Follows the queryset-style query path of ``orm_path`` starting from ``model`` class.  If the
-    path ends up referring to a bad field name, ``django.db.models.fields.FieldDoesNotExist`` will
+    path ends up referring to a bad field name, ``django.core.exceptions.FieldDoesNotExist`` will
     be raised.
 
     """
