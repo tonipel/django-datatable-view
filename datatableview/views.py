@@ -25,7 +25,7 @@ import dateutil.parser
 from .forms import XEditableUpdateForm
 from .utils import (FIELD_TYPES, ObjectListResult, DatatableOptions, DatatableStructure,
                     split_real_fields, filter_real_fields, resolve_orm_path, get_first_orm_bit,
-                    get_field_definition)
+                    get_field_definition, is_ajax)
 
 log = logging.getLogger(__name__)
 
@@ -58,7 +58,7 @@ class DatatableMixin(MultipleObjectMixin):
 
         """
 
-        if request.is_ajax() or request.GET.get('ajax') == 'true':
+        if is_ajax(request) or request.GET.get('ajax') == 'true':
             return self.get_ajax(request, *args, **kwargs)
         return super(DatatableMixin, self).get(request, *args, **kwargs)
 

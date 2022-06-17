@@ -486,3 +486,11 @@ def filter_real_fields(model, fields, key=None):
             virtual_fields.append(field)
     return db_fields, virtual_fields
 
+def is_ajax(request):
+    """
+    This function reproduces the exact functionality of
+    request.is_ajax() from Django, which was deprecated
+    in Django 3.1
+    """
+    return request.headers.get("x-requested-with") == "XMLHttpRequest"
+
