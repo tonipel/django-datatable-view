@@ -140,8 +140,8 @@ class DatatableMixin(MultipleObjectMixin):
                         elif field.choices:
                             # Query the database for the database value rather than display value
                             database_values, display_values = zip(*field.flatchoices)
-                            string_database_values = [unicode(value).lower() for value in database_values]
-                            display_values = [unicode(value).lower() for value in display_values]
+                            string_database_values = [str(value).lower() for value in database_values]
+                            display_values = [str(value).lower() for value in display_values]
 
                             all_values = zip(display_values, string_database_values, database_values)
 
@@ -506,7 +506,7 @@ class DatatableMixin(MultipleObjectMixin):
                 if isinstance(values, str):  # not unicode
                     values = values.decode('utf-8')
                 else:
-                    values = unicode(values)
+                    values = str(values)
             values = (values, re.sub(r'<[^>]+>', '', six.text_type(values)))
 
         return values
